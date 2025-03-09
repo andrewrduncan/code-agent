@@ -1,0 +1,144 @@
+{
+  "name": "code-agent",
+  "displayName": "Code Agent",
+  "description": "AI coding assistant with chat interface",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "*"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "codeAgent.openChat",
+        "title": "Open Code Agent Chat",
+        "category": "Code Agent"
+      },
+      {
+        "command": "codeAgent.toggleChat",
+        "title": "Toggle Code Agent Chat",
+        "category": "Code Agent"
+      },
+      {
+        "command": "codeAgent.openSettings",
+        "title": "Settings",
+        "icon": "$(gear)",
+        "category": "Code Agent"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "code-agent-chat",
+          "title": "Code Agent",
+          "icon": "media/robot.svg"
+        }
+      ]
+    },
+    "views": {
+      "code-agent-chat": [
+        {
+          "type": "webview",
+          "id": "codeAgent.chatView",
+          "name": "Chat",
+          "icon": "media/robot.svg",
+          "contextualTitle": "Code Agent Chat"
+        }
+      ]
+    },
+    "viewsWelcome": [
+      {
+        "view": "codeAgent.chatView",
+        "contents": "Welcome to Code Agent"
+      }
+    ],
+    "configuration": {
+      "title": "Code Agent",
+      "properties": {
+        "codeAgent.ollamaHost": {
+          "type": "string",
+          "default": "192.168.1.81",
+          "description": "Ollama API host"
+        },
+        "codeAgent.ollamaPort": {
+          "type": "number",
+          "default": 11434,
+          "description": "Ollama API port"
+        },
+        "codeAgent.model": {
+          "type": "string",
+          "default": "codellama",
+          "description": "Model to use for chat"
+        },
+        "codeAgent.mode": {
+          "type": "string",
+          "enum": ["chat", "agent"],
+          "default": "chat",
+          "description": "Mode to use for interaction (chat or agent)"
+        }
+      }
+    },
+    "menus": {
+      "view/title": [
+        {
+          "command": "codeAgent.openSettings",
+          "when": "view == codeAgent.chatView",
+          "group": "navigation"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "codeAgent.openSettings",
+          "when": "view == codeAgent.chatView"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run package",
+    "compile": "webpack",
+    "watch": "webpack --watch",
+    "package": "webpack --mode production --devtool hidden-source-map",
+    "compile-tests": "tsc -p . --outDir out",
+    "watch-tests": "tsc -p . -w --outDir out",
+    "pretest": "npm run compile-tests && npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/glob": "^8.1.0",
+    "@types/mocha": "^10.0.6",
+    "@types/node": "^20.17.24",
+    "@types/vscode": "^1.85.0",
+    "@typescript-eslint/eslint-plugin": "^6.15.0",
+    "@typescript-eslint/parser": "^6.15.0",
+    "@vscode/test-electron": "^2.3.8",
+    "css-loader": "^6.10.0",
+    "esbuild": "^0.25.0",
+    "esbuild-plugin-copy": "^2.1.1",
+    "eslint": "^8.56.0",
+    "glob": "^10.3.10",
+    "mini-css-extract-plugin": "^2.8.1",
+    "mocha": "^10.2.0",
+    "ts-loader": "^9.5.1",
+    "typescript": "^5.3.3",
+    "webpack": "^5.89.0",
+    "webpack-cli": "^5.1.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/code-agent.git"
+  },
+  "publisher": "your-publisher-name",
+  "dependencies": {
+    "@types/marked": "^5.0.2",
+    "marked": "^11.2.0",
+    "preact": "^10.19.6"
+  }
+}

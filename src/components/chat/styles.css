@@ -1,0 +1,189 @@
+body {
+    padding: 0;
+    margin: 0;
+    height: 100vh;
+}
+#root {
+    height: 100%;
+}
+.chat-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+.messages-container {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+.messages {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.message {
+    padding: 8px 12px;
+    margin: 4px 0;
+    border-radius: 4px;
+}
+.user {
+    background: var(--vscode-input-background);
+    align-self: flex-end;
+    max-width: 80%;
+}
+.assistant {
+    background: var(--vscode-editor-background);
+    border: 1px solid var(--vscode-input-border);
+    max-width: 80%;
+}
+.thinking {
+    margin-bottom: 8px;
+}
+.thinking-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 4px;
+    background: var(--vscode-button-secondaryBackground);
+    color: var(--vscode-button-secondaryForeground);
+    font-size: 0.9em;
+}
+.thinking-header:hover {
+    background: var(--vscode-button-secondaryHoverBackground);
+}
+.thinking-content {
+    display: none;
+    margin: 8px 0;
+    padding: 8px;
+    background: var(--vscode-textBlockQuote-background);
+    border-left: 4px solid var(--vscode-textBlockQuote-border);
+    font-size: 0.9em;
+    color: var(--vscode-textBlockQuote-foreground);
+}
+.thinking.expanded .thinking-content {
+    display: block;
+}
+.thinking-icon {
+    transition: transform 0.2s;
+}
+.thinking.expanded .thinking-icon {
+    transform: rotate(90deg);
+}
+.error {
+    background: var(--vscode-inputValidation-errorBackground);
+    color: var(--vscode-inputValidation-errorForeground);
+    border: 1px solid var(--vscode-inputValidation-errorBorder);
+}
+.input-section {
+    border-top: 1px solid var(--vscode-input-border);
+    padding: 20px;
+    background: var(--vscode-editor-background);
+}
+.input-container {
+    display: flex;
+    gap: 10px;
+}
+textarea {
+    flex: 1;
+    padding: 8px;
+    background: var(--vscode-input-background);
+    color: var(--vscode-input-foreground);
+    border: 1px solid var(--vscode-input-border);
+    resize: none;
+}
+button {
+    background: var(--vscode-button-background);
+    color: var(--vscode-button-foreground);
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+}
+button:hover {
+    background: var(--vscode-button-hoverBackground);
+}
+.loading {
+    text-align: center;
+    padding: 10px;
+    font-style: italic;
+    color: var(--vscode-descriptionForeground);
+}
+pre {
+    margin: 8px 0;
+    padding: 8px;
+    background: var(--vscode-textCodeBlock-background);
+    border-radius: 4px;
+    overflow-x: auto;
+}
+code {
+    font-family: var(--vscode-editor-font-family);
+    font-size: 0.9em;
+}
+.loading-indicator {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2px;
+}
+.loading-indicator .dot {
+    animation: bounce 1.4s infinite;
+    font-size: 24px;
+    line-height: 20px;
+}
+.loading-indicator .dot:nth-child(2) {
+    animation-delay: 0.2s;
+}
+.loading-indicator .dot:nth-child(3) {
+    animation-delay: 0.4s;
+}
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-4px);
+    }
+}
+.chat-controls {
+    display: flex;
+    gap: 8px;
+    padding: 8px;
+    background: var(--vscode-editor-background);
+    border-bottom: 1px solid var(--vscode-input-border);
+}
+.control-group {
+    position: relative;
+}
+.control-group select {
+    appearance: none;
+    background: var(--vscode-dropdown-background);
+    color: var(--vscode-dropdown-foreground);
+    border: 1px solid var(--vscode-dropdown-border);
+    padding: 4px 24px 4px 8px;
+    border-radius: 2px;
+    font-size: 12px;
+    cursor: pointer;
+}
+.control-group::after {
+    content: '';
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 4px solid var(--vscode-dropdown-foreground);
+    pointer-events: none;
+}
+.control-group select:hover {
+    background: var(--vscode-dropdown-listBackground);
+}
+.control-group select:focus {
+    outline: 1px solid var(--vscode-focusBorder);
+    outline-offset: -1px;
+} 
