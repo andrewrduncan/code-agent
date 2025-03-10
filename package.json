@@ -30,6 +30,12 @@
         "title": "Settings",
         "icon": "$(gear)",
         "category": "Code Agent"
+      },
+      {
+        "command": "codeAgent.newChat",
+        "title": "New Chat",
+        "icon": "$(add)",
+        "category": "Code Agent"
       }
     ],
     "viewsContainers": {
@@ -38,6 +44,11 @@
           "id": "code-agent-chat",
           "title": "Code Agent",
           "icon": "media/robot.svg"
+        },
+        {
+          "id": "code-agent-settings",
+          "title": "Code Agent Settings",
+          "icon": "$(gear)"
         }
       ]
     },
@@ -49,6 +60,15 @@
           "name": "Chat",
           "icon": "media/robot.svg",
           "contextualTitle": "Code Agent Chat"
+        }
+      ],
+      "code-agent-settings": [
+        {
+          "type": "webview",
+          "id": "codeAgent.settingsView",
+          "name": "Settings",
+          "icon": "$(gear)",
+          "contextualTitle": "Code Agent Settings"
         }
       ]
     },
@@ -78,23 +98,75 @@
         },
         "codeAgent.mode": {
           "type": "string",
-          "enum": ["chat", "agent"],
+          "enum": [
+            "chat",
+            "agent"
+          ],
           "default": "chat",
           "description": "Mode to use for interaction (chat or agent)"
+        },
+        "codeAgent.modelConfig": {
+          "type": "object",
+          "default": {
+            "temperature": 0.7,
+            "top_p": 0.9,
+            "top_k": 40,
+            "repeat_penalty": 1.1,
+            "max_tokens": 2048
+          },
+          "description": "Model configuration parameters",
+          "properties": {
+            "temperature": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 2,
+              "description": "Controls randomness in the model's output"
+            },
+            "top_p": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "description": "Controls diversity via nucleus sampling"
+            },
+            "top_k": {
+              "type": "number",
+              "minimum": 1,
+              "description": "Controls diversity via top-k sampling"
+            },
+            "repeat_penalty": {
+              "type": "number",
+              "minimum": 1,
+              "description": "Penalty for repeating tokens"
+            },
+            "max_tokens": {
+              "type": "number",
+              "minimum": 1,
+              "description": "Maximum number of tokens to generate"
+            }
+          }
         }
       }
     },
     "menus": {
       "view/title": [
         {
+          "command": "codeAgent.newChat",
+          "when": "view == codeAgent.chatView",
+          "group": "navigation@1"
+        },
+        {
           "command": "codeAgent.openSettings",
           "when": "view == codeAgent.chatView",
-          "group": "navigation"
+          "group": "navigation@2"
         }
       ],
       "commandPalette": [
         {
           "command": "codeAgent.openSettings",
+          "when": "view == codeAgent.chatView"
+        },
+        {
+          "command": "codeAgent.newChat",
           "when": "view == codeAgent.chatView"
         }
       ]
@@ -115,7 +187,7 @@
     "@types/glob": "^8.1.0",
     "@types/mocha": "^10.0.6",
     "@types/node": "^20.17.24",
-    "@types/vscode": "^1.85.0",
+    "@types/vscode": "^1.98.0",
     "@typescript-eslint/eslint-plugin": "^6.15.0",
     "@typescript-eslint/parser": "^6.15.0",
     "@vscode/test-electron": "^2.3.8",
@@ -138,6 +210,7 @@
   "publisher": "your-publisher-name",
   "dependencies": {
     "@types/marked": "^5.0.2",
+    "@vscode/codicons": "^0.0.36",
     "marked": "^11.2.0",
     "preact": "^10.19.6"
   }

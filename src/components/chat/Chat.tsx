@@ -61,18 +61,20 @@ export function Chat({ vscode, onSendMessage }: ChatProps) {
 
     return (
         <div class="chat-container">
-            <ChatControls
-                mode={mode}
-                model={model}
-                availableModels={availableModels}
-                onModeChange={handleModeChange}
-                onModelChange={handleModelChange}
-            />
             <MessageList messages={messages} isLoading={isLoading} />
-            <ChatInput 
-                onSendMessage={onSendMessage}
-                disabled={isLoading}
-            />
+            <div class="input-container-wrapper">
+                <ChatInput 
+                    onSendMessage={onSendMessage}
+                    disabled={isLoading}
+                />
+                <ChatControls
+                    mode={mode}
+                    model={model}
+                    availableModels={availableModels}
+                    onModeChange={handleModeChange}
+                    onModelChange={handleModelChange}
+                />
+            </div>
         </div>
     );
 } 

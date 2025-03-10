@@ -78,14 +78,14 @@ body {
     color: var(--vscode-inputValidation-errorForeground);
     border: 1px solid var(--vscode-inputValidation-errorBorder);
 }
-.input-section {
+.input-container-wrapper {
     border-top: 1px solid var(--vscode-input-border);
-    padding: 20px;
     background: var(--vscode-editor-background);
 }
 .input-container {
     display: flex;
     gap: 10px;
+    padding: 20px;
 }
 textarea {
     flex: 1;
@@ -150,12 +150,14 @@ code {
 .chat-controls {
     display: flex;
     gap: 8px;
-    padding: 8px;
+    padding: 8px 20px;
     background: var(--vscode-editor-background);
-    border-bottom: 1px solid var(--vscode-input-border);
+    border-top: 1px solid var(--vscode-input-border);
 }
 .control-group {
-    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 4px;
 }
 .control-group select {
     appearance: none;
@@ -166,6 +168,7 @@ code {
     border-radius: 2px;
     font-size: 12px;
     cursor: pointer;
+    height: 24px;
 }
 .control-group::after {
     content: '';
@@ -186,4 +189,10 @@ code {
 .control-group select:focus {
     outline: 1px solid var(--vscode-focusBorder);
     outline-offset: -1px;
+}
+.mode-select {
+    width: 80px;
+}
+.model-select {
+    width: 160px;
 } 
