@@ -45,7 +45,7 @@ export class OllamaService {
         return this.modelManager.getAvailableModels();
     }
 
-    async chat(messages: Array<{ role: string; content: string }>) {
+    async chat(messages: Array<{ role: string; content: string }>, options?: { onThinking?: (thought: string) => void }) {
         if (!this.modelManager) {
             throw new Error('OllamaService not initialized');
         }
@@ -71,7 +71,8 @@ export class OllamaService {
                 body: JSON.stringify({
                     model: config.model,
                     messages: messages,
-                    stream: false
+                    stream: true,
+                    system: "Before providing your response, you MUST show your thinking process by wrapping it in <think> tags. For example: <think>Let me analyze this...</think> followed by your actual response. This helps users understand your reasoning process."
                 }),
             });
 
@@ -85,12 +86,53 @@ export class OllamaService {
                 throw new Error(`Ollama API error: ${response.status} ${response.statusText}\n${errorText}`);
             }
 
-            const data = await response.json() as OllamaResponse;
-            if (!data.message || !data.message.content) {
-                console.error('Invalid response from Ollama:', data);
-                throw new Error('Invalid response format from Ollama API');
+            if (!response.body) {
+                throw new Error('No response body received');
             }
-            return data.message.content;
+
+            const reader = response.body.getReader();
+            let content = '';
+            let lastThinkingContent = '';
+            
+            try {
+                while (true) {
+                    const { done, value } = await reader.read();
+                    if (done) break;
+                    
+                    const chunk = new TextDecoder().decode(value);
+                    const lines = chunk.split('\n').filter(line => line.trim());
+                    
+                    for (const line of lines) {
+                        try {
+                            const data = JSON.parse(line);
+                            if (data.message?.content) {
+                                content += data.message.content;
+                                
+                                // Extract thinking content
+                                const thinkMatch = content.match(/<think>([\s\S]*?)<\/think>/);
+                                if (thinkMatch && thinkMatch[1] !== lastThinkingContent) {
+                                    lastThinkingContent = thinkMatch[1];
+                                    if (options?.onThinking) {
+                                        options.onThinking(lastThinkingContent);
+                                    }
+                                }
+                            }
+                        } catch (e) {
+                            console.warn('Error parsing chunk:', e);
+                        }
+                    }
+                }
+            } finally {
+                reader.releaseLock();
+            }
+
+            // Clean up the final content by removing thinking tags
+            const finalContent = content.replace(/<think>[\s\S]*?<\/think>/g, '').trim();
+
+            return {
+                role: 'assistant',
+                content: finalContent
+            };
         } catch (error) {
             if (error instanceof TypeError && error.message.includes('fetch')) {
                 console.error('Network error connecting to Ollama:', error);
